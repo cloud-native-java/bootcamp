@@ -2,9 +2,12 @@ package com.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @SpringBootApplication // <1>
 public class DemoApplication {
@@ -12,14 +15,42 @@ public class DemoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args); // <2>
 	}
+}
 
-	@RestController // <3>
-	public static class HelloRestController {
+// <3>
+@Entity
+class Cat {
 
-		@RequestMapping(value = "/hello") // <4>
-		String hello(
-				@RequestParam(value = "name", defaultValue = "World") String name) { // <5>
-			return "Hello, " + name;
-		}
+	@Id
+	@GeneratedValue
+	private Long id;
+	private String name;
+
+	@Override
+	public String toString() {
+		return "Cat{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				'}';
 	}
+
+	Cat() {
+	}
+
+	public Cat(String name) {
+		this.name = name;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+}
+
+// <4>
+@RepositoryRestResource
+interface CatRepository extends JpaRepository<Cat, Long> {
 }
