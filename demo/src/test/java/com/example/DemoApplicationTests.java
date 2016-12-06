@@ -49,6 +49,6 @@ public class DemoApplicationTests {
 							.getContentAsString();
 					assertTrue(contentAsString.split("totalElements")[1].split(":")[1]
 							.trim().split(",")[0].equals("3"));
-				}) ;
+				});
 	}
 }
