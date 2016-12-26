@@ -1,8 +1,6 @@
-package com.example.noraai;
+package com.example.raai;
 
 import com.example.Customer;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -16,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class CustomerService {
@@ -26,16 +25,16 @@ public class CustomerService {
 					.setType(EmbeddedDatabaseType.H2)
 					.build();
 
-	public Customer findById(Long id) {
+	public Collection<Customer> findAll() {
 		List<Customer> customerList = new ArrayList<>();
 		try {
 			try (Connection c = dataSource.getConnection()) {
 				Statement statement = c.createStatement();
-				try (ResultSet resultSet = statement.executeQuery("select * from CUSTOMERS")) {
-					while (resultSet.next()) {
+				try (ResultSet rs = statement.executeQuery("select * from CUSTOMERS")) {
+					while (rs.next()) {
 						customerList.add(new Customer(
-								resultSet.getLong("ID"),
-								resultSet.getString("EMAIL")
+								rs.getLong("ID"),
+								rs.getString("EMAIL")
 						));
 					}
 				}
@@ -43,12 +42,13 @@ public class CustomerService {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		return customerList.iterator().next();
+		return customerList;
 	}
 
 	public static void main(String argsp[]) throws Throwable {
-		Log log = LogFactory.getLog(CustomerService.class);
 		CustomerService customerService = new CustomerService();
+
+		//<1>
 		DataSource dataSource = customerService.dataSource;
 		DataSourceInitializer init = new DataSourceInitializer();
 		init.setDataSource(dataSource);
@@ -57,8 +57,10 @@ public class CustomerService {
 				new ClassPathResource("data.sql"));
 		init.setDatabasePopulator(populator);
 		init.afterPropertiesSet();
-		Customer byId = customerService.findById(1L);
-		Assert.notNull(byId, "the customer should be discoverable");
-		log.info("byId: " + byId);
+
+		//<2>
+		int size = customerService.findAll().size();
+		Assert.isTrue(size == 2);
+
 	}
 }

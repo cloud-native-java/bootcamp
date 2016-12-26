@@ -15,6 +15,7 @@ public class CustomerService {
 
 	private final DataSource dataSource;
 
+	// <1>
 	public CustomerService(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
@@ -24,11 +25,11 @@ public class CustomerService {
 		try {
 			try (Connection c = dataSource.getConnection()) {
 				Statement statement = c.createStatement();
-				try (ResultSet resultSet = statement.executeQuery("select * from CUSTOMERS")) {
-					while (resultSet.next()) {
+				try (ResultSet rs = statement.executeQuery("select * from CUSTOMERS")) {
+					while (rs.next()) {
 						customerList.add(new Customer(
-								resultSet.getLong("ID"),
-								resultSet.getString("EMAIL")
+								rs.getLong("ID"),
+								rs.getString("EMAIL")
 						));
 					}
 				}

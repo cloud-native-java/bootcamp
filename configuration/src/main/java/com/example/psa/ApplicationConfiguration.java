@@ -21,6 +21,7 @@ public class ApplicationConfiguration {
 				.build();
 	}
 
+	// <1>
 	@Bean
 	JdbcTemplate jdbcTemplate(DataSource dataSource) {
 		return new JdbcTemplate(dataSource);

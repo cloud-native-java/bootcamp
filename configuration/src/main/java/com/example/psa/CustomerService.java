@@ -17,8 +17,10 @@ public class CustomerService {
 	}
 
 	public Collection<Customer> findAll() {
+		// <1>
 		RowMapper<Customer> rowMapper =
 				(rs, i) -> new Customer(rs.getLong("ID"), rs.getString("EMAIL"));
+		// <2>
 		return this.jdbcTemplate.query("select * from CUSTOMERS ", rowMapper);
 	}
 }

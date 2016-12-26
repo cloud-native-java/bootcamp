@@ -9,7 +9,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan
+@ComponentScan // <1>
 public class ApplicationConfiguration {
 
 	@Bean(destroyMethod = "shutdown")

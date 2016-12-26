@@ -10,11 +10,12 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-@Aspect
+@Aspect // <1>
 public class LoggingAroundAspect {
 
 	private Log log = LogFactory.getLog(getClass());
 
+	// <2>
 	@Around("execution(* com.example.aop.CustomerService.*(..))")
 	public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
 		LocalDateTime start = LocalDateTime.now();
@@ -23,7 +24,7 @@ public class LoggingAroundAspect {
 		Throwable toThrow = null;
 		Object returnValue = null;
 
-		// <1>
+		// <3>
 		try {
 			returnValue = joinPoint.proceed();
 		} catch (Throwable t) {
@@ -34,8 +35,10 @@ public class LoggingAroundAspect {
 		log.info("finishing @ " + stop.toString() + " with duration " +
 				stop.minusNanos(start.getNano()).getNano());
 
+		// <4>
 		if (null != toThrow) throw toThrow;
 
+		// <5>
 		return returnValue;
 	}
 }

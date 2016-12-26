@@ -7,9 +7,11 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.sql.DataSource;
 
+// <1>
 @Configuration
 public class ApplicationConfiguration {
 
+	// <2>
 	@Bean(destroyMethod = "shutdown")
 	DataSource dataSource() {
 		return new EmbeddedDatabaseBuilder()
@@ -18,6 +20,7 @@ public class ApplicationConfiguration {
 				.build();
 	}
 
+	// <3>
 	@Bean
 	CustomerService customerService(DataSource dataSource) {
 		return new CustomerService(dataSource);
