@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 @Configuration
 public class ApplicationConfiguration {
 
-	@Bean
+	@Bean(destroyMethod = "shutdown")
 	DataSource dataSource() {
 		return new EmbeddedDatabaseBuilder()
 				.setType(EmbeddedDatabaseType.H2)

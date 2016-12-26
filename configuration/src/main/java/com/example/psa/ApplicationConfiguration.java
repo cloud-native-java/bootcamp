@@ -13,11 +13,11 @@ import javax.sql.DataSource;
 @ComponentScan
 public class ApplicationConfiguration {
 
-	@Bean
+	@Bean(destroyMethod = "shutdown")
 	DataSource dataSource() {
 		return new EmbeddedDatabaseBuilder()
-				.setName("customers")
 				.setType(EmbeddedDatabaseType.H2)
+				.setName("customers")
 				.build();
 	}
 
