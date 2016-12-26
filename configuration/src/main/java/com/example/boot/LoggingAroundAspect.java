@@ -1,4 +1,4 @@
-package com.example.aop;
+package com.example.boot;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,7 +16,7 @@ public class LoggingAroundAspect {
 	private Log log = LogFactory.getLog(getClass());
 
 	// <2>
-	@Around("execution(* com.example.aop.CustomerService.*(..))")
+	@Around("execution(* com.example.boot.CustomerService.*(..))")
 	public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
 		LocalDateTime start = LocalDateTime.now();
 
