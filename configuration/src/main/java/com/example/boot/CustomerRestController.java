@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
-@RestController
+@RestController // <1>
 public class CustomerRestController {
 
 	private final CustomerService customerService;
@@ -15,6 +15,7 @@ public class CustomerRestController {
 		this.customerService = customerService;
 	}
 
+	// <2>
 	@GetMapping("/customers")
 	public Collection<Customer> readAll() {
 		return this.customerService.findAll();

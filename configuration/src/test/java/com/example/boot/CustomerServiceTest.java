@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.hamcrest.Matchers.containsString;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
-		classes = com.example.boot.ApplicationConfiguration.class)
+		classes = ApplicationConfiguration.class)
 @RunWith(SpringRunner.class)
 public class CustomerServiceTest {
 

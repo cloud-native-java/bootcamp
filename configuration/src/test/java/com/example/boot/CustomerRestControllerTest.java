@@ -13,9 +13,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-		classes = com.example.boot.ApplicationConfiguration.class)
+		classes = ApplicationConfiguration.class)
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 public class CustomerRestControllerTest {
