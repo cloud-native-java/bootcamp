@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class CloudFoundryClientExample {
 
+	// <1>
 	@Bean
 	ReactorCloudFoundryClient cloudFoundryClient(
 			ConnectionContext connectionContext,
@@ -30,6 +31,7 @@ public class CloudFoundryClientExample {
 				.build();
 	}
 
+	// <2>
 	@Bean
 	ReactorDopplerClient dopplerClient(
 			ConnectionContext connectionContext,
@@ -40,6 +42,7 @@ public class CloudFoundryClientExample {
 				.build();
 	}
 
+	// <3>
 	@Bean
 	ReactorUaaClient uaaClient(
 			ConnectionContext connectionContext,
@@ -50,25 +53,7 @@ public class CloudFoundryClientExample {
 				.build();
 	}
 
-	@Bean
-	DefaultConnectionContext connectionContext(@Value("${cf.api}") String apiHost) {
-		if (apiHost.contains("://")) {
-			apiHost = apiHost.split("://")[1];
-		}
-		return DefaultConnectionContext.builder()
-				.apiHost(apiHost)
-				.build();
-	}
-
-	@Bean
-	PasswordGrantTokenProvider tokenProvider(@Value("${cf.user}") String username,
-	                                         @Value("${cf.password}") String password) {
-		return PasswordGrantTokenProvider.builder()
-				.password(password)
-				.username(username)
-				.build();
-	}
-
+	// <4>
 	@Bean
 	DefaultCloudFoundryOperations cloudFoundryOperations(
 			CloudFoundryClient cloudFoundryClient,
@@ -85,56 +70,39 @@ public class CloudFoundryClientExample {
 				.build();
 	}
 
+	// <5>
+	@Bean
+	DefaultConnectionContext connectionContext(@Value("${cf.api}") String apiHost) {
+		if (apiHost.contains("://")) {
+			apiHost = apiHost.split("://")[1];
+		}
+		return DefaultConnectionContext.builder()
+				.apiHost(apiHost)
+				.build();
+	}
+
+	// <6>
+	@Bean
+	PasswordGrantTokenProvider tokenProvider(@Value("${cf.user}") String username,
+	                                         @Value("${cf.password}") String password) {
+		return PasswordGrantTokenProvider.builder()
+				.password(password)
+				.username(username)
+				.build();
+	}
+
+	// <5>
 	@Bean
 	CommandLineRunner applicationRunner(
 		 CloudFoundryOperations ops ) {
-		return args -> {
-			ops.applications().list().subscribe(System.out::println);
-		} ;
+		return args ->
+		 	ops
+			 	.applications()
+				.list()
+				.subscribe(System.out::println);
 	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(CloudFoundryClientExample.class, args);
 	}
 }
-//
-//
-//@Component
-//class Promoter {
-//
-//	private final CloudFoundryOperations cloudFoundryClient;
-//
-//	Promoter(CloudFoundryOperations cloudFoundryClient) {
-//		this.cloudFoundryClient = cloudFoundryClient;
-//	}
-//
-//	void promote(String appName) {
-//
-//		String live = appName + "-live", staging = appName + "-staging";
-//
-//		Log log = LogFactory.getLog(getClass());
-//		try {
-//			this.cloudFoundryClient.routes()
-//					.unmap(UnmapRouteRequest.builder()
-//							.applicationName(appName)
-//							.domain("cfapps.io")
-//							.host(staging)
-//							.build())
-//					.block();
-//		} catch (Throwable t) {
-//			log.error(t);
-//		}
-//
-//		try {
-//			this.cloudFoundryClient.routes()
-//					.map(MapRouteRequest.builder()
-//							.applicationName(appName)
-//							.domain("cfapps.io")
-//							.host(live)
-//							.build())
-//					.block();
-//		} catch (Throwable t) {
-//			log.error(t);
-//		}
-//	}
-//}
