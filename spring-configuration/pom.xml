@@ -16,8 +16,6 @@
 
     <artifactId>spring-configuration</artifactId>
     <name>bootcamp/spring-configuration</name>
-
-
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
