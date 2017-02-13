@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-
 @SpringBootApplication // <1>
 public class DemoApplication {
 
@@ -27,19 +26,19 @@ class Cat {
 	private Long id;
 	private String name;
 
+	Cat() {
+	}
+
+	public Cat(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public String toString() {
 		return "Cat{" +
 				"id=" + id +
 				", name='" + name + '\'' +
 				'}';
-	}
-
-	Cat() {
-	}
-
-	public Cat(String name) {
-		this.name = name;
 	}
 
 	public Long getId() {
