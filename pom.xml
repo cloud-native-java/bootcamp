@@ -15,6 +15,7 @@
         <module>cf-client-demo</module>
         <module>spring-configuration</module>
         <module>demo</module>
+        <module>bootcamp-it</module>
     </modules>
     <build>
         <plugins>
