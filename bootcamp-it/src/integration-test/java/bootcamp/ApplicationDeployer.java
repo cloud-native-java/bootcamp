@@ -31,7 +31,7 @@ class ApplicationDeployer {
 						.application(jar.toPath())
 						.instances(1)
 						.build())
-				.thenMany(Flux.concat(Flux.fromStream(Stream.of(svcs)
+				.thenMany(Flux.merge(Flux.fromStream(Stream.of(svcs)
 						.map(svc ->
 								cf.services()
 										.bind(BindServiceInstanceRequest.builder()
