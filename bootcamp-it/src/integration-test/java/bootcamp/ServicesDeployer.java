@@ -18,20 +18,20 @@ class ServicesDeployer {
 	Mono<Void> deployService(String applicationName, String mysqlServiceName) {
 		return cf.services()
 				.listInstances()
-				.filter(si -> si.getName().equalsIgnoreCase(mysqlServiceName))
+				.filter(si -> si.getName().equalsIgnoreCase(mysqlServiceName)) //<1>
 				.singleOrEmpty()
 				.then(serviceInstance ->
 						cf.services()
-								.unbind(UnbindServiceInstanceRequest.builder()
+								.unbind(UnbindServiceInstanceRequest.builder() // <2>
 										.applicationName(applicationName)
 										.serviceInstanceName(mysqlServiceName)
 										.build())
 								.then(cf.services()
-										.deleteInstance(DeleteServiceInstanceRequest.builder()
+										.deleteInstance(DeleteServiceInstanceRequest.builder() // <3>
 												.name(serviceInstance.getName())
 												.build())))
 				.then(cf.services()
-						.createInstance(CreateServiceInstanceRequest.builder()
+						.createInstance(CreateServiceInstanceRequest.builder() // <4>
 								.serviceName("p-mysql")
 								.planName("100mb")
 								.serviceInstanceName(mysqlServiceName)

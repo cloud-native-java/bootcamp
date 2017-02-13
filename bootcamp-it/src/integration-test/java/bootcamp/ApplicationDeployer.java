@@ -20,10 +20,13 @@ class ApplicationDeployer {
 		this.cf = cf;
 	}
 
-	Mono<Void> deployApplication(File jar, String applicationName, String... svcs) {
+	Mono<Void> deployApplication(
+			File jar,
+			String applicationName,
+			String... svcs) {
 
 		return cf.applications()
-				.push(PushApplicationRequest.builder()
+				.push(PushApplicationRequest.builder() // <1>
 						.name(applicationName)
 						.noStart(true)
 						.randomRoute(true)
@@ -31,7 +34,7 @@ class ApplicationDeployer {
 						.application(jar.toPath())
 						.instances(1)
 						.build())
-				.thenMany(Flux.merge(Flux.fromStream(Stream.of(svcs)
+				.thenMany(Flux.merge(Flux.fromStream(Stream.of(svcs) // <2>
 						.map(svc ->
 								cf.services()
 										.bind(BindServiceInstanceRequest.builder()
@@ -40,13 +43,13 @@ class ApplicationDeployer {
 												.build())))))
 				.then()
 				.then(cf.applications()
-						.setEnvironmentVariable(SetEnvironmentVariableApplicationRequest.builder()
+						.setEnvironmentVariable(SetEnvironmentVariableApplicationRequest.builder() // <3>
 								.name(applicationName)
 								.variableName("SPRING_PROFILES_ACTIVE")
 								.variableValue("cloud")
 								.build()))
 				.then(cf.applications()
-						.start(StartApplicationRequest.builder()
+						.start(StartApplicationRequest.builder() // <4>
 								.name(applicationName)
 								.stagingTimeout(Duration.ofMinutes(5))
 								.startupTimeout(Duration.ofMinutes(5))

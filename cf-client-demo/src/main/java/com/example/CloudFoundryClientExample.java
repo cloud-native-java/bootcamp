@@ -1,7 +1,6 @@
 package com.example;
 
 import org.cloudfoundry.client.CloudFoundryClient;
-import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.DefaultCloudFoundryOperations;
 import org.cloudfoundry.reactor.ConnectionContext;
 import org.cloudfoundry.reactor.DefaultConnectionContext;
@@ -11,7 +10,6 @@ import org.cloudfoundry.reactor.doppler.ReactorDopplerClient;
 import org.cloudfoundry.reactor.tokenprovider.PasswordGrantTokenProvider;
 import org.cloudfoundry.reactor.uaa.ReactorUaaClient;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -91,16 +89,7 @@ public class CloudFoundryClientExample {
 				.build();
 	}
 
-	// <5>
-	@Bean
-	CommandLineRunner applicationRunner(
-		 CloudFoundryOperations ops ) {
-		return args ->
-		 	ops
-			 	.applications()
-				.list()
-				.subscribe(System.out::println);
-	}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(CloudFoundryClientExample.class, args);
