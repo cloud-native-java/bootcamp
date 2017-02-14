@@ -9,15 +9,14 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan // <1>
+@ComponentScan
+// <1>
 public class ApplicationConfiguration {
 
 	@Bean(destroyMethod = "shutdown")
 	DataSource dataSource() {
-		return new EmbeddedDatabaseBuilder()
-				.setType(EmbeddedDatabaseType.H2)
-				.setName("customers")
-				.build();
+		return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
+				.setName("customers").build();
 	}
 
 }

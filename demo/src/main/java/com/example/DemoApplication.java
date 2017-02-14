@@ -9,7 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@SpringBootApplication // <1>
+// <4>
+@RepositoryRestResource
+interface CatRepository extends JpaRepository<Cat, Long> {
+}
+
+@SpringBootApplication
+// <1>
 public class DemoApplication {
 
 	public static void main(String[] args) {
@@ -35,10 +41,7 @@ class Cat {
 
 	@Override
 	public String toString() {
-		return "Cat{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				'}';
+		return "Cat{" + "id=" + id + ", name='" + name + '\'' + '}';
 	}
 
 	public Long getId() {
@@ -48,9 +51,4 @@ class Cat {
 	public String getName() {
 		return name;
 	}
-}
-
-// <4>
-@RepositoryRestResource
-interface CatRepository extends JpaRepository<Cat, Long> {
 }

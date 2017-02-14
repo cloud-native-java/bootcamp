@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {ApplicationConfiguration.class, TestConfiguration.class})
+@ContextConfiguration(classes = { ApplicationConfiguration.class, TestConfiguration.class })
 public class CustomerServiceTest {
 
 	@Autowired

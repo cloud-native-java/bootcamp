@@ -27,14 +27,12 @@ public class CustomerService {
 				Statement statement = c.createStatement();
 				try (ResultSet rs = statement.executeQuery("select * from CUSTOMERS")) {
 					while (rs.next()) {
-						customerList.add(new Customer(
-								rs.getLong("ID"),
-								rs.getString("EMAIL")
-						));
+						customerList.add(new Customer(rs.getLong("ID"), rs.getString("EMAIL")));
 					}
 				}
 			}
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 		return customerList;

@@ -15,8 +15,6 @@ class ApplicationListingCommandLineRunner implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		cf.applications()
-				.list()
-				.subscribe(System.out::println); // <2>
+		cf.applications().list().subscribe(System.out::println); // <2>
 	}
 }

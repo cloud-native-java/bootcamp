@@ -17,10 +17,8 @@ public class ApplicationConfiguration {
 
 	@Bean(destroyMethod = "shutdown")
 	DataSource dataSource() {
-		return new EmbeddedDatabaseBuilder()
-				.setType(EmbeddedDatabaseType.H2)
-				.setName("customers")
-				.build();
+		return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
+				.setName("customers").build();
 	}
 
 	@Bean

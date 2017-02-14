@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-		classes = ApplicationConfiguration.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ApplicationConfiguration.class)
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 public class CustomerRestControllerTest {
@@ -25,8 +24,7 @@ public class CustomerRestControllerTest {
 	@Test
 	public void readAll() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/customers"))
-				.andExpect(jsonPath("$.*", hasSize(2)))
-				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.*", hasSize(2))).andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
 	}
 }

@@ -11,10 +11,7 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "Customer{" +
-				"id=" + id +
-				", email='" + email + '\'' +
-				'}';
+		return "Customer{" + "id=" + id + ", email='" + email + '\'' + '}';
 	}
 
 	public Long getId() {

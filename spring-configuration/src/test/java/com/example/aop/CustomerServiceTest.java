@@ -13,14 +13,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.hamcrest.Matchers.containsString;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {ApplicationConfiguration.class, TestConfiguration.class})
+@ContextConfiguration(classes = { ApplicationConfiguration.class, TestConfiguration.class })
 public class CustomerServiceTest {
-
-	@Autowired
-	private CustomerService customerService;
 
 	@Rule
 	public OutputCapture outputCapture = new OutputCapture();
+	@Autowired
+	private CustomerService customerService;
 
 	@Test
 	public void findAll() throws Exception {

@@ -34,21 +34,23 @@ public class DemoApplicationTests {
 	// <4>
 	@Before
 	public void before() throws Exception {
-		Stream.of("Felix", "Garfield", "Whiskers").forEach(n -> catRepository.save(new Cat(n)));
+		Stream.of("Felix", "Garfield", "Whiskers").forEach(
+				n -> catRepository.save(new Cat(n)));
 	}
 
 	// <5>
 	@Test
 	public void catsReflectedInRead() throws Exception {
 		MediaType halJson = MediaType.parseMediaType("application/hal+json;charset=UTF-8");
-		this.mvc.perform(get("/cats"))
+		this.mvc
+				.perform(get("/cats"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(halJson))
-				.andExpect(mvcResult -> {
-					String contentAsString = mvcResult.getResponse()
-							.getContentAsString();
-					assertTrue(contentAsString.split("totalElements")[1].split(":")[1]
-							.trim().split(",")[0].equals("3"));
-				});
+				.andExpect(
+						mvcResult -> {
+							String contentAsString = mvcResult.getResponse().getContentAsString();
+							assertTrue(contentAsString.split("totalElements")[1].split(":")[1].trim()
+									.split(",")[0].equals("3"));
+						});
 	}
 }

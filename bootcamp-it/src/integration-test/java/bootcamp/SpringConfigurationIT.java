@@ -16,23 +16,8 @@ import java.io.File;
 @SpringBootTest(classes = SpringConfigurationIT.Config.class)
 public class SpringConfigurationIT {
 
-	@SpringBootApplication
-	public static class Config {
-
-		@Bean
-		ApplicationDeployer applications(CloudFoundryOperations cloudFoundryOperations) {
-			return new ApplicationDeployer(cloudFoundryOperations);
-		}
-
-		@Bean
-		ServicesDeployer services(CloudFoundryOperations cloudFoundryOperations) {
-			return new ServicesDeployer(cloudFoundryOperations);
-		}
-	}
-
 	@Autowired
 	private ApplicationDeployer applicationDeployer;
-
 	@Autowired
 	private ServicesDeployer servicesDeployer;
 
@@ -53,6 +38,20 @@ public class SpringConfigurationIT {
 
 		// <3>
 		service.then(apps).block();
+	}
+
+	@SpringBootApplication
+	public static class Config {
+
+		@Bean
+		ApplicationDeployer applications(CloudFoundryOperations cloudFoundryOperations) {
+			return new ApplicationDeployer(cloudFoundryOperations);
+		}
+
+		@Bean
+		ServicesDeployer services(CloudFoundryOperations cloudFoundryOperations) {
+			return new ServicesDeployer(cloudFoundryOperations);
+		}
 	}
 
 }

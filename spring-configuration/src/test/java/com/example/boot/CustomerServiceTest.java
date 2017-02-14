@@ -11,16 +11,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.Matchers.containsString;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
-		classes = ApplicationConfiguration.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = ApplicationConfiguration.class)
 @RunWith(SpringRunner.class)
 public class CustomerServiceTest {
 
-	@Autowired
-	private CustomerService customerService;
-
 	@Rule
 	public OutputCapture outputCapture = new OutputCapture();
+	@Autowired
+	private CustomerService customerService;
 
 	@Test
 	public void findAll() throws Exception {

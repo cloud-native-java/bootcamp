@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
-@RestController // <1>
+@RestController
+// <1>
 public class CustomerRestController {
 
 	private final CustomerService customerService;
