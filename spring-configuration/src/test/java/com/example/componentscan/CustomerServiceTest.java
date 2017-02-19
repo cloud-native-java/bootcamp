@@ -10,15 +10,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = { ApplicationConfiguration.class,
-	TestConfiguration.class })
+ TestConfiguration.class })
 public class CustomerServiceTest {
 
-	@Autowired
-	private CustomerService customerService;
+ @Autowired
+ private CustomerService customerService;
 
-	@Test
-	public void findAll() throws Exception {
-		int size = this.customerService.findAll().size();
-		Assert.assertEquals(size, 2);
-	}
+ @Test
+ public void findAll() throws Exception {
+  int size = this.customerService.findAll().size();
+  Assert.assertEquals(size, 2);
+ }
 }

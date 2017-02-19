@@ -14,21 +14,21 @@ import static org.hamcrest.Matchers.containsString;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = { ApplicationConfiguration.class,
-	TestConfiguration.class })
+ TestConfiguration.class })
 public class CustomerServiceTest {
 
-	@Rule
-	public OutputCapture outputCapture = new OutputCapture();
+ @Rule
+ public OutputCapture outputCapture = new OutputCapture();
 
-	@Autowired
-	private CustomerService customerService;
+ @Autowired
+ private CustomerService customerService;
 
-	@Test
-	public void findAll() throws Exception {
-		int size = this.customerService.findAll().size();
-		org.junit.Assert.assertEquals(size, 2);
-		String consoleOutput = this.outputCapture.toString();
-		Assert.assertThat(consoleOutput, containsString("starting @"));
-		Assert.assertThat(consoleOutput, containsString("finishing @"));
-	}
+ @Test
+ public void findAll() throws Exception {
+  int size = this.customerService.findAll().size();
+  org.junit.Assert.assertEquals(size, 2);
+  String consoleOutput = this.outputCapture.toString();
+  Assert.assertThat(consoleOutput, containsString("starting @"));
+  Assert.assertThat(consoleOutput, containsString("finishing @"));
+ }
 }

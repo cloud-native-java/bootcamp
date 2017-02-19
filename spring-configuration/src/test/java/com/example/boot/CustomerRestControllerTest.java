@@ -18,16 +18,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class CustomerRestControllerTest {
 
-	@Autowired
-	private MockMvc mockMvc;
+ @Autowired
+ private MockMvc mockMvc;
 
-	@Test
-	public void readAll() throws Exception {
-		this.mockMvc
-			.perform(MockMvcRequestBuilders.get("/customers"))
-			.andExpect(jsonPath("$.*", hasSize(2)))
-			.andExpect(status().isOk())
-			.andExpect(
-				content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-	}
+ @Test
+ public void readAll() throws Exception {
+  this.mockMvc.perform(MockMvcRequestBuilders.get("/customers"))
+   .andExpect(jsonPath("$.*", hasSize(2))).andExpect(status().isOk())
+   .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+ }
 }

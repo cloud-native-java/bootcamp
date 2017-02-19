@@ -13,16 +13,16 @@ import javax.sql.DataSource;
 @ComponentScan
 public class ApplicationConfiguration {
 
-	@Bean(destroyMethod = "shutdown")
-	DataSource dataSource() {
-		return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
-			.setName("customers").build();
-	}
+ @Bean(destroyMethod = "shutdown")
+ DataSource dataSource() {
+  return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
+   .setName("customers").build();
+ }
 
-	// <1>
-	@Bean
-	JdbcTemplate jdbcTemplate(DataSource dataSource) {
-		return new JdbcTemplate(dataSource);
-	}
+ // <1>
+ @Bean
+ JdbcTemplate jdbcTemplate(DataSource dataSource) {
+  return new JdbcTemplate(dataSource);
+ }
 
 }

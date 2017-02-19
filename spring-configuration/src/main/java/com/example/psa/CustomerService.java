@@ -10,17 +10,17 @@ import java.util.Collection;
 @Component
 public class CustomerService {
 
-	private final JdbcTemplate jdbcTemplate;
+ private final JdbcTemplate jdbcTemplate;
 
-	public CustomerService(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
+ public CustomerService(JdbcTemplate jdbcTemplate) {
+  this.jdbcTemplate = jdbcTemplate;
+ }
 
-	public Collection<Customer> findAll() {
-		// <1>
-		RowMapper<Customer> rowMapper = (rs, i) -> new Customer(rs.getLong("ID"),
-			rs.getString("EMAIL"));
-		// <2>
-		return this.jdbcTemplate.query("select * from CUSTOMERS ", rowMapper);
-	}
+ public Collection<Customer> findAll() {
+  // <1>
+  RowMapper<Customer> rowMapper = (rs, i) -> new Customer(rs.getLong("ID"),
+   rs.getString("EMAIL"));
+  // <2>
+  return this.jdbcTemplate.query("select * from CUSTOMERS ", rowMapper);
+ }
 }

@@ -11,16 +11,16 @@ import javax.sql.DataSource;
 @Configuration
 public class ApplicationConfiguration {
 
-	// <2>
-	@Bean(destroyMethod = "shutdown")
-	DataSource dataSource() {
-		return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
-			.setName("customers").build();
-	}
+ // <2>
+ @Bean(destroyMethod = "shutdown")
+ DataSource dataSource() {
+  return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
+   .setName("customers").build();
+ }
 
-	// <3>
-	@Bean
-	CustomerService customerService(DataSource dataSource) {
-		return new CustomerService(dataSource);
-	}
+ // <3>
+ @Bean
+ CustomerService customerService(DataSource dataSource) {
+  return new CustomerService(dataSource);
+ }
 }

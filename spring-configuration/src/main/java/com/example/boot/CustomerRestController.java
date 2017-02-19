@@ -10,15 +10,15 @@ import java.util.Collection;
 // <1>
 public class CustomerRestController {
 
-	private final CustomerService customerService;
+ private final CustomerService customerService;
 
-	public CustomerRestController(CustomerService customerService) {
-		this.customerService = customerService;
-	}
+ public CustomerRestController(CustomerService customerService) {
+  this.customerService = customerService;
+ }
 
-	// <2>
-	@GetMapping("/customers")
-	public Collection<Customer> readAll() {
-		return this.customerService.findAll();
-	}
+ // <2>
+ @GetMapping("/customers")
+ public Collection<Customer> readAll() {
+  return this.customerService.findAll();
+ }
 }

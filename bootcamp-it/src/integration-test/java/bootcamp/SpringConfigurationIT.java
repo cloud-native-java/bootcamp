@@ -16,43 +16,43 @@ import java.io.File;
 @SpringBootTest(classes = SpringConfigurationIT.Config.class)
 public class SpringConfigurationIT {
 
- @Autowired
- private ApplicationDeployer applicationDeployer;
- @Autowired
- private ServicesDeployer servicesDeployer;
+	@Autowired
+	private ApplicationDeployer applicationDeployer;
 
- @Test
- public void deploy() throws Throwable {
-  File projectFolder = new File(new File("."), "../spring-configuration");
-  File jar = new File(projectFolder, "target/spring-configuration.jar");
-  String applicationName = "bootcamp-customers";
-  String mysqlServiceName = "bootcamp-customers-mysql";
+	@Autowired
+	private ServicesDeployer servicesDeployer;
 
-  // <1>
-  Mono<Void> service = servicesDeployer.deployService(
-    applicationName, mysqlServiceName);
+	@Test
+	public void deploy() throws Throwable {
+		File projectFolder = new File(new File("."), "../spring-configuration");
+		File jar = new File(projectFolder, "target/spring-configuration.jar");
+		String applicationName = "bootcamp-customers";
+		String mysqlServiceName = "bootcamp-customers-mysql";
 
-  // <2>
-  Mono<Void> apps = applicationDeployer.deployApplication(
-    jar, applicationName, mysqlServiceName);
+		// <1>
+		Mono<Void> service = servicesDeployer.deployService(
+				applicationName, mysqlServiceName);
 
-  // <3>
-  service.then(apps).block();
- }
+		// <2>
+		Mono<Void> apps = applicationDeployer.deployApplication(
+				jar, applicationName, mysqlServiceName);
 
- @SpringBootApplication
- public static class Config {
+		// <3>
+		service.then(apps).block();
+	}
 
-  @Bean
-  ApplicationDeployer applications(CloudFoundryOperations cloudFoundryOperations) {
-   return new ApplicationDeployer(cloudFoundryOperations);
-  }
+	@SpringBootApplication
+	public static class Config {
 
-  @Bean
-  ServicesDeployer services(CloudFoundryOperations cloudFoundryOperations) {
-   return new ServicesDeployer(cloudFoundryOperations);
-  }
- }
+		@Bean
+		ApplicationDeployer applications(CloudFoundryOperations cloudFoundryOperations) {
+			return new ApplicationDeployer(cloudFoundryOperations);
+		}
+
+		@Bean
+		ServicesDeployer services(CloudFoundryOperations cloudFoundryOperations) {
+			return new ServicesDeployer(cloudFoundryOperations);
+		}
+	}
 
 }
-

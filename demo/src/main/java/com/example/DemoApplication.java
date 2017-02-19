@@ -18,38 +18,38 @@ interface CatRepository extends JpaRepository<Cat, Long> {
 // <1>
 public class DemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args); // <2>
-	}
+ public static void main(String[] args) {
+  SpringApplication.run(DemoApplication.class, args); // <2>
+ }
 }
 
 // <3>
 @Entity
 class Cat {
 
-	@Id
-	@GeneratedValue
-	private Long id;
+ @Id
+ @GeneratedValue
+ private Long id;
 
-	private String name;
+ private String name;
 
-	Cat() {
-	}
+ Cat() {
+ }
 
-	public Cat(String name) {
-		this.name = name;
-	}
+ public Cat(String name) {
+  this.name = name;
+ }
 
-	@Override
-	public String toString() {
-		return "Cat{" + "id=" + id + ", name='" + name + '\'' + '}';
-	}
+ @Override
+ public String toString() {
+  return "Cat{" + "id=" + id + ", name='" + name + '\'' + '}';
+ }
 
-	public Long getId() {
-		return id;
-	}
+ public Long getId() {
+  return id;
+ }
 
-	public String getName() {
-		return name;
-	}
+ public String getName() {
+  return name;
+ }
 }

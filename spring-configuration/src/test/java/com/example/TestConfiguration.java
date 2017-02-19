@@ -11,14 +11,14 @@ import javax.sql.DataSource;
 @Configuration
 public class TestConfiguration {
 
-	@Bean
-	public DataSourceInitializer init(DataSource dataSource) {
-		DataSourceInitializer init = new DataSourceInitializer();
-		init.setDataSource(dataSource);
-		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-		populator.setScripts(new ClassPathResource("schema.sql"),
-			new ClassPathResource("data.sql"));
-		init.setDatabasePopulator(populator);
-		return init;
-	}
+ @Bean
+ public DataSourceInitializer init(DataSource dataSource) {
+  DataSourceInitializer init = new DataSourceInitializer();
+  init.setDataSource(dataSource);
+  ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+  populator.setScripts(new ClassPathResource("schema.sql"),
+   new ClassPathResource("data.sql"));
+  init.setDatabasePopulator(populator);
+  return init;
+ }
 }
