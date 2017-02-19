@@ -23,37 +23,38 @@ public class CloudFoundryClientExample {
 
 	// <1>
 	@Bean
-	ReactorCloudFoundryClient cloudFoundryClient(ConnectionContext connectionContext,
-			TokenProvider tokenProvider) {
-		return ReactorCloudFoundryClient.builder().connectionContext(connectionContext)
-				.tokenProvider(tokenProvider).build();
+	ReactorCloudFoundryClient cloudFoundryClient(
+		ConnectionContext connectionContext, TokenProvider tokenProvider) {
+		return ReactorCloudFoundryClient.builder()
+			.connectionContext(connectionContext).tokenProvider(tokenProvider)
+			.build();
 	}
 
 	// <2>
 	@Bean
 	ReactorDopplerClient dopplerClient(ConnectionContext connectionContext,
-			TokenProvider tokenProvider) {
+		TokenProvider tokenProvider) {
 		return ReactorDopplerClient.builder().connectionContext(connectionContext)
-				.tokenProvider(tokenProvider).build();
+			.tokenProvider(tokenProvider).build();
 	}
 
 	// <3>
 	@Bean
 	ReactorUaaClient uaaClient(ConnectionContext connectionContext,
-			TokenProvider tokenProvider) {
+		TokenProvider tokenProvider) {
 		return ReactorUaaClient.builder().connectionContext(connectionContext)
-				.tokenProvider(tokenProvider).build();
+			.tokenProvider(tokenProvider).build();
 	}
 
 	// <4>
 	@Bean
 	DefaultCloudFoundryOperations cloudFoundryOperations(
-			CloudFoundryClient cloudFoundryClient, ReactorDopplerClient dopplerClient,
-			ReactorUaaClient uaaClient, @Value("${cf.org}") String organization,
-			@Value("${cf.space}") String space) {
-		return DefaultCloudFoundryOperations.builder().cloudFoundryClient(cloudFoundryClient)
-				.dopplerClient(dopplerClient).uaaClient(uaaClient).organization(organization)
-				.space(space).build();
+		CloudFoundryClient cloudFoundryClient, ReactorDopplerClient dopplerClient,
+		ReactorUaaClient uaaClient, @Value("${cf.org}") String organization,
+		@Value("${cf.space}") String space) {
+		return DefaultCloudFoundryOperations.builder()
+			.cloudFoundryClient(cloudFoundryClient).dopplerClient(dopplerClient)
+			.uaaClient(uaaClient).organization(organization).space(space).build();
 	}
 
 	// <5>
@@ -67,9 +68,10 @@ public class CloudFoundryClientExample {
 
 	// <6>
 	@Bean
-	PasswordGrantTokenProvider tokenProvider(@Value("${cf.user}") String username,
-			@Value("${cf.password}") String password) {
-		return PasswordGrantTokenProvider.builder().password(password).username(username)
-				.build();
+	PasswordGrantTokenProvider tokenProvider(
+		@Value("${cf.user}") String username,
+		@Value("${cf.password}") String password) {
+		return PasswordGrantTokenProvider.builder().password(password)
+			.username(username).build();
 	}
 }

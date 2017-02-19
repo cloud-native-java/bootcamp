@@ -20,7 +20,7 @@ import java.util.List;
 public class CustomerService {
 
 	private final DataSource dataSource = new EmbeddedDatabaseBuilder()
-			.setName("customers").setType(EmbeddedDatabaseType.H2).build();
+		.setName("customers").setType(EmbeddedDatabaseType.H2).build();
 
 	public static void main(String argsp[]) throws Throwable {
 		CustomerService customerService = new CustomerService();
@@ -30,8 +30,8 @@ public class CustomerService {
 		DataSourceInitializer init = new DataSourceInitializer();
 		init.setDataSource(dataSource);
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-		populator.setScripts(new ClassPathResource("schema.sql"), new ClassPathResource(
-				"data.sql"));
+		populator.setScripts(new ClassPathResource("schema.sql"),
+			new ClassPathResource("data.sql"));
 		init.setDatabasePopulator(populator);
 		init.afterPropertiesSet();
 
@@ -48,7 +48,8 @@ public class CustomerService {
 				Statement statement = c.createStatement();
 				try (ResultSet rs = statement.executeQuery("select * from CUSTOMERS")) {
 					while (rs.next()) {
-						customerList.add(new Customer(rs.getLong("ID"), rs.getString("EMAIL")));
+						customerList.add(new Customer(rs.getLong("ID"), rs
+							.getString("EMAIL")));
 					}
 				}
 			}

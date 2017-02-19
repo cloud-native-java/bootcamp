@@ -30,6 +30,7 @@ class Cat {
 	@Id
 	@GeneratedValue
 	private Long id;
+
 	private String name;
 
 	Cat() {

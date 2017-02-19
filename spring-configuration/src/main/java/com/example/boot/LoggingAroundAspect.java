@@ -35,7 +35,7 @@ public class LoggingAroundAspect {
 
 		log.info("starting @ " + start.toString());
 		log.info("finishing @ " + stop.toString() + " with duration "
-				+ stop.minusNanos(start.getNano()).getNano());
+			+ stop.minusNanos(start.getNano()).getNano());
 
 		// <4>
 		if (null != toThrow)

@@ -16,8 +16,8 @@ public class TestConfiguration {
 		DataSourceInitializer init = new DataSourceInitializer();
 		init.setDataSource(dataSource);
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-		populator.setScripts(new ClassPathResource("schema.sql"), new ClassPathResource(
-				"data.sql"));
+		populator.setScripts(new ClassPathResource("schema.sql"),
+			new ClassPathResource("data.sql"));
 		init.setDatabasePopulator(populator);
 		return init;
 	}

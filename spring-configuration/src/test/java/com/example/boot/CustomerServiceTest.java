@@ -17,6 +17,7 @@ public class CustomerServiceTest {
 
 	@Rule
 	public OutputCapture outputCapture = new OutputCapture();
+
 	@Autowired
 	private CustomerService customerService;
 
