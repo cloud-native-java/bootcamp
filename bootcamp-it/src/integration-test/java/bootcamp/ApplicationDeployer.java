@@ -14,45 +14,41 @@ import java.util.stream.Stream;
 
 class ApplicationDeployer {
 
-	private final CloudFoundryOperations cf;
+ private final CloudFoundryOperations cf;
 
-	ApplicationDeployer(CloudFoundryOperations cf) {
-		this.cf = cf;
-	}
+ ApplicationDeployer(CloudFoundryOperations cf) {
+  this.cf = cf;
+ }
 
-	Mono<Void> deployApplication(
-			File jar,
-			String applicationName,
-			String... svcs) {
+ Mono<Void> deployApplication(File jar, String applicationName, String... svcs) {
 
-		return cf.applications()
-				.push(PushApplicationRequest.builder() // <1>
-						.name(applicationName)
-						.noStart(true)
-						.randomRoute(true)
-						.buildpack("https://github.com/cloudfoundry/java-buildpack.git")
-						.application(jar.toPath())
-						.instances(1)
-						.build())
-				.thenMany(Flux.merge(Flux.fromStream(Stream.of(svcs) // <2>
-						.map(svc ->
-								cf.services()
-										.bind(BindServiceInstanceRequest.builder()
-												.applicationName(applicationName)
-												.serviceInstanceName(svc)
-												.build())))))
-				.then()
-				.then(cf.applications()
-						.setEnvironmentVariable(SetEnvironmentVariableApplicationRequest.builder() // <3>
-								.name(applicationName)
-								.variableName("SPRING_PROFILES_ACTIVE")
-								.variableValue("cloud")
-								.build()))
-				.then(cf.applications()
-						.start(StartApplicationRequest.builder() // <4>
-								.name(applicationName)
-								.stagingTimeout(Duration.ofMinutes(5))
-								.startupTimeout(Duration.ofMinutes(5))
-								.build()));
-	}
+  return cf
+   .applications()
+   .push(
+    PushApplicationRequest
+     .builder()
+     // <1>
+     .name(applicationName).noStart(true).randomRoute(true)
+     .buildpack("https://github.com/cloudfoundry/java-buildpack.git")
+     .application(jar.toPath()).instances(1).build())
+   .thenMany(
+    Flux.merge(Flux.fromStream(Stream.of(svcs) // <2>
+     .map(
+      svc -> cf.services().bind(
+       BindServiceInstanceRequest.builder().applicationName(applicationName)
+        .serviceInstanceName(svc).build())))))
+   .then()
+   .then(
+    cf.applications().setEnvironmentVariable(
+     SetEnvironmentVariableApplicationRequest.builder()
+      // <3>
+      .name(applicationName).variableName("SPRING_PROFILES_ACTIVE")
+      .variableValue("cloud").build()))
+   .then(
+    cf.applications().start(
+     StartApplicationRequest.builder()
+      // <4>
+      .name(applicationName).stagingTimeout(Duration.ofMinutes(5))
+      .startupTimeout(Duration.ofMinutes(5)).build()));
+ }
 }
