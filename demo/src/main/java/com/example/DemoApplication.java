@@ -14,8 +14,7 @@ import javax.persistence.Id;
 interface CatRepository extends JpaRepository<Cat, Long> {
 }
 
-@SpringBootApplication
-// <1>
+@SpringBootApplication // <1>
 public class DemoApplication {
 
  public static void main(String[] args) {

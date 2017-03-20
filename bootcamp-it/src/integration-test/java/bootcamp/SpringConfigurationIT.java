@@ -1,58 +1,48 @@
 package bootcamp;
 
-import org.cloudfoundry.operations.CloudFoundryOperations;
+import cnj.CloudFoundryService;
+import org.cloudfoundry.operations.applications.ApplicationManifest;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import reactor.core.publisher.Mono;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SpringConfigurationIT.Config.class)
 public class SpringConfigurationIT {
 
- @Autowired
- private ApplicationDeployer applicationDeployer;
+	@Autowired
+	private CloudFoundryService cloudFoundryService;
 
- @Autowired
- private ServicesDeployer servicesDeployer;
+	private RestTemplate restTemplate = new RestTemplate();
 
- @Test
- public void deploy() throws Throwable {
-  File projectFolder = new File(new File("."), "../spring-configuration");
-  File jar = new File(projectFolder, "target/spring-configuration.jar");
-  String applicationName = "bootcamp-customers";
-  String mysqlServiceName = "bootcamp-customers-mysql";
+	@Test
+	public void deploy() throws Throwable {
+		File projectFolder = new File(new File("."), "../spring-configuration");
+		String mysqlServiceName = "bootcamp-customers-mysql";
+		cloudFoundryService.createServiceIfMissing("p-mysql", "100mb", mysqlServiceName);
+		File manifest = new File(projectFolder, "manifest.yml");
+		Map<File, ApplicationManifest> manifestFrom = this.cloudFoundryService.applicationManifestFrom(manifest);
+		manifestFrom.forEach((k, f) -> {
+			this.cloudFoundryService.pushApplicationUsingManifest(manifest);
+			String urlForCustomerRestUrl = this.cloudFoundryService.urlForApplication(f.getName());
+			ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(urlForCustomerRestUrl + "/customers", String.class);
+			Assert.assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
+			String body = responseEntity.getBody();
+			Assert.assertTrue(body.contains("rj@cnj.com"));
+		});
+	}
 
-  // <1>
-  Mono<Void> service = servicesDeployer.deployService(applicationName,
-   mysqlServiceName);
-
-  // <2>
-  Mono<Void> apps = applicationDeployer.deployApplication(jar, applicationName,
-   mysqlServiceName);
-
-  // <3>
-  service.then(apps).block();
- }
-
- @SpringBootApplication
- public static class Config {
-
-  @Bean
-  ApplicationDeployer applications(CloudFoundryOperations cloudFoundryOperations) {
-   return new ApplicationDeployer(cloudFoundryOperations);
-  }
-
-  @Bean
-  ServicesDeployer services(CloudFoundryOperations cloudFoundryOperations) {
-   return new ServicesDeployer(cloudFoundryOperations);
-  }
- }
-
+	@SpringBootApplication
+	public static class Config {
+	}
 }

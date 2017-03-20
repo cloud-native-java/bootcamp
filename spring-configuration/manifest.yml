@@ -4,7 +4,7 @@ applications:
   buildpack: https://github.com/cloudfoundry/java-buildpack.git # 2
   instances: 1
   random-route: true
-  path: target/configuration.jar                                # 3
+  path: target/spring-configuration.jar                                # 3
   services:
     - bootcamp-customers-mysql                                  # 4
   env:

@@ -11,6 +11,7 @@
     <artifactId>bootcamp-it</artifactId>
     <name>bootcamp/bootcamp-it</name>
     <dependencies>
+
         <dependency>
             <groupId>cnj</groupId>
             <artifactId>it-support</artifactId>
