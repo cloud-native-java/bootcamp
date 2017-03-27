@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 
 cf create-service p-mysql 100mb bootcamp-customers-mysql            # 1
 
