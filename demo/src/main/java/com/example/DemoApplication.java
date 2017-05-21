@@ -9,17 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-// <4>
-@RepositoryRestResource
-interface CatRepository extends JpaRepository<Cat, Long> {
-}
-
-@SpringBootApplication
 // <1>
+@SpringBootApplication
 public class DemoApplication {
 
  public static void main(String[] args) {
-  SpringApplication.run(DemoApplication.class, args); // <2>
+  // <2>
+  SpringApplication.run(DemoApplication.class, args);
  }
 }
 
@@ -52,4 +48,10 @@ class Cat {
  public String getName() {
   return name;
  }
+}
+
+
+// <4>
+@RepositoryRestResource
+interface CatRepository extends JpaRepository<Cat, Long> {
 }
