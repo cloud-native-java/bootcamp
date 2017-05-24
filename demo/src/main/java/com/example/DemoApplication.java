@@ -50,7 +50,6 @@ class Cat {
  }
 }
 
-
 // <4>
 @RepositoryRestResource
 interface CatRepository extends JpaRepository<Cat, Long> {

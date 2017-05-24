@@ -1,10 +1,18 @@
 package bootcamp;
 
 import org.cloudfoundry.operations.CloudFoundryOperations;
-import org.cloudfoundry.operations.applications.PushApplicationRequest;
-import org.cloudfoundry.operations.applications.SetEnvironmentVariableApplicationRequest;
-import org.cloudfoundry.operations.applications.StartApplicationRequest;
-import org.cloudfoundry.operations.services.BindServiceInstanceRequest;
+
+//@formatter:off
+import org.cloudfoundry.operations.applications
+        .PushApplicationRequest;
+import org.cloudfoundry.operations.applications
+        .SetEnvironmentVariableApplicationRequest;
+import org.cloudfoundry.operations.applications
+        .StartApplicationRequest;
+import org.cloudfoundry.operations.services
+        .BindServiceInstanceRequest;
+//@formatter:on
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
