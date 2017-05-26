@@ -11,6 +11,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
@@ -29,22 +31,17 @@ public class SpringConfigurationIT {
     public void deploy() throws Throwable {
         File projectFolder = new File(new File("."), "../spring-configuration");
         File jar = new File(projectFolder, "target/spring-configuration.jar");
+
         String applicationName = "bootcamp-customers";
         String mysqlServiceName = "bootcamp-customers-mysql";
+        
+        Map<String, String> env = new HashMap<>();
+        env.put("SPRING_PROFILES_ACTIVE", "cloud");
 
-        CountDownLatch countDownLatch = new CountDownLatch(1);
         servicesDeployer
-                .deployService(applicationName, mysqlServiceName) // <1>
-                .thenEmpty(i -> applicationDeployer.deployApplication(jar, applicationName, mysqlServiceName)) // <2>
-                .thenEmpty(i -> {
-                    try {
-                        countDownLatch.countDown();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }); // <3>
-
-        countDownLatch.await();
+                .deployService(applicationName, mysqlServiceName, "p-mysql", "100mb") // <1>
+                .then(applicationDeployer.deployApplication(jar, applicationName, env, Duration.ofMinutes(5), mysqlServiceName)) // <2>
+                .block(); // <3>
 
     }
 

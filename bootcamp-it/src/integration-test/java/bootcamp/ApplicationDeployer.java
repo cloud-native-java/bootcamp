@@ -20,6 +20,9 @@ import reactor.core.publisher.Mono;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 class ApplicationDeployer {
@@ -32,8 +35,9 @@ class ApplicationDeployer {
         this.cf = cf;
     }
 
-    Flux<Void> deployApplication(File jar, String applicationName, String... svcs) {
+    Mono<Void> deployApplication(File jar, String applicationName, Map<String, String> envOg, Duration timeout, String... svcs) {
         log.info("deployApplication!");
+        Map<String, String> env = new HashMap<>(envOg);
         return cf
                 .applications()
                 .push(
@@ -43,26 +47,27 @@ class ApplicationDeployer {
                                 .name(applicationName).noStart(true).randomRoute(true)
                                 .buildpack("https://github.com/cloudfoundry/java-buildpack.git")
                                 .application(jar.toPath()).instances(1).build())
-                .flatMap(x ->
-                        Flux.fromStream(Stream.of(svcs)) // <2>
-                                .map(svc -> {
-                                    BindServiceInstanceRequest request = BindServiceInstanceRequest.builder().applicationName(applicationName)
-                                            .serviceInstanceName(svc).build();
-                                    return cf.services().bind(request);
-                                }))
-                .flatMap(x ->
-                        cf.applications().setEnvironmentVariable(
-                                SetEnvironmentVariableApplicationRequest.builder()
-                                        // <3>
-                                        .name(applicationName).variableName("SPRING_PROFILES_ACTIVE")
-                                        .variableValue("cloud").build()))
-                .flatMap(x -> {
-                    StartApplicationRequest request1 = StartApplicationRequest.builder()
-                            // <4>
-                            .name(applicationName).stagingTimeout(Duration.ofMinutes(5))
-                            .startupTimeout(Duration.ofMinutes(5)).build();
-                    return cf.applications().start(request1);
-                });
+                .then(
+                        Flux.just(svcs) // <2>
+                                .flatMap(
+                                        svc -> {
+                                            BindServiceInstanceRequest request = BindServiceInstanceRequest
+                                                    .builder().applicationName(applicationName).serviceInstanceName(svc)
+                                                    .build();
+                                            return cf.services().bind(request);
+                                        })
+                                .then()
+                )
+                .then(
+                        Flux.fromIterable(env.entrySet())
+                                .flatMap(kv -> // <3>
+                                        cf.applications().setEnvironmentVariable(SetEnvironmentVariableApplicationRequest.builder().name(applicationName).variableName(kv.getKey()).variableValue(kv.getValue()).build()))
+                                .then()
+                )
+
+                .then(
+                        cf.applications().start(StartApplicationRequest.builder().name(applicationName).stagingTimeout(timeout).startupTimeout(timeout).build())
+                );
 
     }
 }
