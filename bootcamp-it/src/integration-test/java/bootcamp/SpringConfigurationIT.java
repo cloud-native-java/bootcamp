@@ -36,16 +36,17 @@ public class SpringConfigurationIT {
   File jar = new File(projectFolder, "target/spring-configuration.jar");
 
   String applicationName = "bootcamp-customers";
-  String mysqlServiceName = "bootcamp-customers-mysql";
+  String mysqlSvc = "bootcamp-customers-mysql";
 
   Map<String, String> env = new HashMap<>();
   env.put("SPRING_PROFILES_ACTIVE", "cloud");
 
-  servicesDeployer
-   .deployService(applicationName, mysqlServiceName, "p-mysql", "100mb") // <1>
+  Duration timeout = Duration.ofMinutes(5);
+  servicesDeployer.deployService(applicationName, mysqlSvc, "p-mysql", "100mb")
+   // <1>
    .then(
-    applicationDeployer.deployApplication(jar, applicationName, env,
-     Duration.ofMinutes(5), mysqlServiceName)) // <2>
+    applicationDeployer.deployApplication(jar, applicationName, env, timeout,
+     mysqlSvc)) // <2>
    .block(); // <3>
 
  }

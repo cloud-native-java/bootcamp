@@ -25,22 +25,13 @@ class ServicesDeployer {
 
  Mono<Void> deployService(String applicationName, String svcInstanceName,
   String svcTypeName, String planName) {
-  return cf.services().listInstances().cache()
-   .filter(si1 -> si1.getName().equalsIgnoreCase(svcInstanceName))
-   .transform(unbindAndDelete(applicationName, svcInstanceName))
-   .thenEmpty(createService(svcInstanceName, svcTypeName, planName));
+
+  return cf.services().listInstances().cache()// <1>
+   .filter(si1 -> si1.getName().equalsIgnoreCase(svcInstanceName)) // <2>
+   .transform(unbindAndDelete(applicationName, svcInstanceName)) // <3>
+   .thenEmpty(createService(svcInstanceName, svcTypeName, planName)); // <4>
  }
 
- /**
-  * Unbind And Delete is applied to the
-  * shared result Service Instance Flux
-  * via Flux#publish. This avoids both
-  * unbind and delete flows to
-  * subscribe, and instead subscribe
-  * once only. Subscribing twice would
-  * cause listInstances to run twice,
-  * therefore 2 HTTP requests.
-  * */
  private Function<Flux<ServiceInstanceSummary>, Publisher<Void>> unbindAndDelete(
   String applicationName, String svcInstanceName) {
   return siFlux -> Flux.concat(
@@ -48,11 +39,6 @@ class ServicesDeployer {
    delete(svcInstanceName, siFlux));
  }
 
- /**
-  * Only unbind (execute flatMap) IF
-  * service [svcInstanceName] is bound
-  * to [applicationName]
-  */
  private Flux<Void> unbind(String applicationName, String svcInstanceName,
   Flux<ServiceInstanceSummary> siFlux) {
   return siFlux.filter(si -> si.getApplications().contains(applicationName))
@@ -62,19 +48,12 @@ class ServicesDeployer {
       .serviceInstanceName(svcInstanceName).build()));
  }
 
- /**
-  * Only delete IF service
-  * [svcInstanceName] has been found
-  */
  private Flux<Void> delete(String svcInstanceName,
   Flux<ServiceInstanceSummary> siFlux) {
   return siFlux.flatMap(si -> cf.services().deleteInstance(
    DeleteServiceInstanceRequest.builder().name(svcInstanceName).build()));
  }
 
- /**
-  * Template service creation request
-  */
  private Mono<Void> createService(String svcInstanceName, String svcTypeName,
   String planName) {
   return cf.services().createInstance(

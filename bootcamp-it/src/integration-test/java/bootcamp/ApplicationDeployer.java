@@ -1,7 +1,5 @@
 package bootcamp;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.applications.PushApplicationRequest;
 import org.cloudfoundry.operations.applications.SetEnvironmentVariableApplicationRequest;
@@ -15,14 +13,9 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-//@formatter:off
-//@formatter:on
-
 class ApplicationDeployer {
 
  private final CloudFoundryOperations cf;
-
- private final Log log = LogFactory.getLog(getClass());
 
  ApplicationDeployer(CloudFoundryOperations cf) {
   this.cf = cf;
@@ -30,12 +23,10 @@ class ApplicationDeployer {
 
  Mono<Void> deployApplication(File jar, String applicationName,
   Map<String, String> envOg, Duration timeout, String... svcs) {
-  return cf.applications()
-   .push(pushApp(jar, applicationName))
-   // <1>
-   .then(bindServices(applicationName, svcs))
-   .then(setEnvironmentVariables(applicationName, new HashMap<>(envOg)))
-   .then(startApplication(applicationName, timeout));
+  return cf.applications().push(pushApp(jar, applicationName))// <1>
+   .then(bindServices(applicationName, svcs)) // <2>
+   .then(setEnvironmentVariables(applicationName, new HashMap<>(envOg)))// <3>
+   .then(startApplication(applicationName, timeout));// <4>
 
  }
 
@@ -49,7 +40,6 @@ class ApplicationDeployer {
  private Mono<Void> bindServices(String applicationName, String[] svcs) {
   return Flux
    .just(svcs)
-   // <2>
    .flatMap(
     svc -> {
      BindServiceInstanceRequest request = BindServiceInstanceRequest.builder()
@@ -68,8 +58,8 @@ class ApplicationDeployer {
   Map<String, String> env) {
   return Flux
    .fromIterable(env.entrySet())
-   .flatMap(kv -> // <3>
-    cf.applications().setEnvironmentVariable(
+   .flatMap(
+    kv -> cf.applications().setEnvironmentVariable(
      SetEnvironmentVariableApplicationRequest.builder().name(applicationName)
       .variableName(kv.getKey()).variableValue(kv.getValue()).build())).then();
  }
