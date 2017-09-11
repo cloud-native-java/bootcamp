@@ -33,7 +33,7 @@ public class SpringConfigurationIT {
  public void deploy() throws Throwable {
 
   File projectFolder = new File(new File("."), "../spring-configuration");
-  File jar = new File(projectFolder, "target/spring-configuration.jar");
+  File jar = new File(projectFolder, "target/configuration.jar");
 
   String applicationName = "bootcamp-customers";
   String mysqlSvc = "bootcamp-customers-mysql";
